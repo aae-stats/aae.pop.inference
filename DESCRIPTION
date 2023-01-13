@@ -14,7 +14,7 @@ Author: c(
 Maintainer: Jian Yen <jdl.yen@gmail.com>
 Description: Estimate parameters of multispecies population dynamics
     using Approximate Bayesian Computation-Sequential Monte Carlo.
-License: Apache License 2.0
+License: Apache License (>= 2)
 URL: https://aae-stats/github.io/aae.pop.inference, https://github.com/aae-stats/aae.pop.inference
 BugReports: https://github.com/aae-stats/aae.pop.inference/issues
 Encoding: UTF-8
