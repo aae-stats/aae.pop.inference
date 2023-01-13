@@ -34,9 +34,9 @@ popsim_fn <- function(par) {
 
   tmp <- update(
     pop_fn,
-    density_dependence(
-      funs = ricker(par[1], exclude = 1),
-      masks = reproduction(popmat)
+    aae.pop::density_dependence(
+      funs = aae.pop::ricker(par[1], exclude = 1),
+      masks = aae.pop::reproduction(popmat)
     )
   )
 
@@ -51,9 +51,9 @@ popsim_fn_long <- function(par) {
 
   tmp <- update(
     pop_fn,
-    density_dependence(
-      funs = ricker(par[1], exclude = 1),
-      masks = reproduction(popmat)
+    aae.pop::density_dependence(
+      funs = aae.pop::ricker(par[1], exclude = 1),
+      masks = aae.pop::reproduction(popmat)
     )
   )
 
@@ -160,7 +160,7 @@ test_that("inference errors informatively", {
   expect_error(
     inference(
       model = popsim_fn,
-      prior = c(
+      prior = list(
         c("unif", 50),
         c("unif", 0.01, 1)
       ),

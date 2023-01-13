@@ -29,14 +29,49 @@ test_that("stat_abundance_trend returns correct values under defaults", {
 
   # and calculate targets for each set of classes
   target1 <- apply(obs, c(1, 3), sum)
-  target1 <- c(apply(target1, 2, median), apply(target1, 2, sd))
   target2 <- apply(obs[, 2:5, ], c(1, 3), sum)
-  target2 <- c(apply(target2, 2, median), apply(target2, 2, sd))
   target3 <- apply(obs[, 1, , drop = FALSE], c(1, 3), sum)
-  target3 <- c(apply(target3, 2, median), apply(target3, 2, sd))
+
+  # average across iterations and collate for comparison with value
+  target <- c(
+    apply(target1, 2, median),
+    apply(target2, 2, median),
+    apply(target3, 2, median),
+    apply(target1, 2, sd),
+    apply(target2, 2, sd),
+    apply(target3, 2, sd)
+  )
+
+  # zscale these
+  target <- (target - mean(target)) / sd(target)
 
   # check statistic calcs match manual calcs
-  expect_equal(value, c(target1, target2, target3))
+  expect_equal(round(value, 10), round(target, 10))
+
+})
+
+test_that("stat_abundance_trend returns correct values when not z-scaled", {
+
+  # calculate values from data
+  value <- stat_abundance_trend(obs, zscale = FALSE)
+
+  # and calculate targets for each set of classes
+  target1 <- apply(obs, c(1, 3), sum)
+  target2 <- apply(obs[, 2:5, ], c(1, 3), sum)
+  target3 <- apply(obs[, 1, , drop = FALSE], c(1, 3), sum)
+
+  # average across iterations and collate for comparison with value
+  target <- c(
+    apply(target1, 2, median),
+    apply(target2, 2, median),
+    apply(target3, 2, median),
+    apply(target1, 2, sd),
+    apply(target2, 2, sd),
+    apply(target3, 2, sd)
+  )
+
+  # check statistic calcs match manual calcs
+  expect_equal(round(value, 10), round(target, 10))
 
 })
 
@@ -47,14 +82,24 @@ test_that("stat_abundance_trend works with different classes", {
 
   # and calculate targets for each set of classes
   target1 <- apply(obs[, 1, , drop = FALSE], c(1, 3), sum)
-  target1 <- c(apply(target1, 2, median), apply(target1, 2, sd))
   target2 <- apply(obs[, 4:5, ], c(1, 3), sum)
-  target2 <- c(apply(target2, 2, median), apply(target2, 2, sd))
   target3 <- apply(obs[, 2, , drop = FALSE], c(1, 3), sum)
-  target3 <- c(apply(target3, 2, median), apply(target3, 2, sd))
+
+  # average across iterations and collate for comparison with value
+  target <- c(
+    apply(target1, 2, median),
+    apply(target2, 2, median),
+    apply(target3, 2, median),
+    apply(target1, 2, sd),
+    apply(target2, 2, sd),
+    apply(target3, 2, sd)
+  )
+
+  # zscale these
+  target <- (target - mean(target)) / sd(target)
 
   # check statistic calcs match manual calcs
-  expect_equal(value, c(target1, target2, target3))
+  expect_equal(round(value, 10), round(target, 10))
 
 })
 
@@ -65,57 +110,72 @@ test_that("stat_abundance_trend works correctly with different fns", {
 
   # and calculate targets for each set of classes
   target1 <- apply(obs, c(1, 3), sum)
-  target1 <- apply(target1, 2, mean)
   target2 <- apply(obs[, 2:5, ], c(1, 3), sum)
-  target2 <- apply(target2, 2, mean)
   target3 <- apply(obs[, 1, , drop = FALSE], c(1, 3), sum)
-  target3 <- apply(target3, 2, mean)
+
+  # average across iterations and collate for comparison with value
+  target <- c(
+    apply(target1, 2, mean),
+    apply(target2, 2, mean),
+    apply(target3, 2, mean)
+  )
+
+  # zscale these
+  target <- (target - mean(target)) / sd(target)
 
   # check statistic calcs match manual calcs
-  expect_equal(value, c(target1, target2, target3))
+  expect_equal(round(value, 10), round(target, 10))
 
   # calculate values from data
   value <- stat_abundance_trend(obs, fn = var)
 
   # and calculate targets for each set of classes
   target1 <- apply(obs, c(1, 3), sum)
-  target1 <- apply(target1, 2, var)
   target2 <- apply(obs[, 2:5, ], c(1, 3), sum)
-  target2 <- apply(target2, 2, var)
   target3 <- apply(obs[, 1, , drop = FALSE], c(1, 3), sum)
-  target3 <- apply(target3, 2, var)
+
+  # average across iterations and collate for comparison with value
+  target <- c(
+    apply(target1, 2, var),
+    apply(target2, 2, var),
+    apply(target3, 2, var)
+  )
+
+  # zscale these
+  target <- (target - mean(target)) / sd(target)
 
   # check statistic calcs match manual calcs
-  expect_equal(value, c(target1, target2, target3))
+  expect_equal(round(value, 10), round(target, 10))
 
   # calculate values from data
   value <- stat_abundance_trend(obs, fn = list(mean, sd, var, median))
 
   # and calculate targets for each set of classes
   target1 <- apply(obs, c(1, 3), sum)
-  target1 <- c(
-    apply(target1, 2, mean),
-    apply(target1, 2, sd),
-    apply(target1, 2, var),
-    apply(target1, 2, median)
-  )
   target2 <- apply(obs[, 2:5, ], c(1, 3), sum)
-  target2 <- c(
-    apply(target2, 2, mean),
-    apply(target2, 2, sd),
-    apply(target2, 2, var),
-    apply(target2, 2, median)
-  )
   target3 <- apply(obs[, 1, , drop = FALSE], c(1, 3), sum)
-  target3 <- c(
+
+  # average across iterations and collate for comparison with value
+  target <- c(
+    apply(target1, 2, mean),
+    apply(target2, 2, mean),
     apply(target3, 2, mean),
+    apply(target1, 2, sd),
+    apply(target2, 2, sd),
     apply(target3, 2, sd),
+    apply(target1, 2, var),
+    apply(target2, 2, var),
     apply(target3, 2, var),
+    apply(target1, 2, median),
+    apply(target2, 2, median),
     apply(target3, 2, median)
   )
 
+  # zscale these
+  target <- (target - mean(target)) / sd(target)
+
   # check statistic calcs match manual calcs
-  expect_equal(value, c(target1, target2, target3))
+  expect_equal(round(value, 10), round(target, 10))
 
 })
 
@@ -131,24 +191,74 @@ test_that("stat_abundance_moment returns correct values under defaults", {
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target1 <- c(apply(target1, 1, median), apply(target1, 1, sd))
   target2 <- apply(obs[, 2:5, ], c(1, 3), sum)
   target2 <- apply(
     target2,
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target2 <- c(apply(target2, 1, median), apply(target2, 1, sd))
   target3 <- apply(obs[, 1, , drop = FALSE], c(1, 3), sum)
   target3 <- apply(
     target3,
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target3 <- c(apply(target3, 1, median), apply(target3, 1, sd))
+
+  # average across iterations and collate for comparison with value
+  target <- c(
+    apply(target1, 1, median),
+    apply(target2, 1, median),
+    apply(target3, 1, median),
+    apply(target1, 1, sd),
+    apply(target2, 1, sd),
+    apply(target3, 1, sd)
+  )
+
+  # zscale these
+  target <- (target - mean(target)) / sd(target)
 
   # check statistic calcs match manual calcs
-  expect_equal(value, c(target1, target2, target3))
+  expect_equal(round(value, 10), round(target, 10))
+
+})
+
+test_that("stat_abundance_moment returns correct values without z-scaling", {
+
+  # calculate values from data
+  value <- stat_abundance_moment(obs, zscale = FALSE)
+
+  # and calculate targets for each set of classes
+  target1 <- apply(obs, c(1, 3), sum)
+  target1 <- apply(
+    target1,
+    1,
+    function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
+  )
+  target2 <- apply(obs[, 2:5, ], c(1, 3), sum)
+  target2 <- apply(
+    target2,
+    1,
+    function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
+  )
+  target3 <- apply(obs[, 1, , drop = FALSE], c(1, 3), sum)
+  target3 <- apply(
+    target3,
+    1,
+    function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
+  )
+
+  # average across iterations and collate for comparison with value
+  target <- c(
+    apply(target1, 1, median),
+    apply(target2, 1, median),
+    apply(target3, 1, median),
+    apply(target1, 1, sd),
+    apply(target2, 1, sd),
+    apply(target3, 1, sd)
+  )
+
+  # check statistic calcs match manual calcs
+  expect_equal(round(value, 10), round(target, 10))
 
 })
 
@@ -164,24 +274,34 @@ test_that("stat_abundance_moment works with different classes", {
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target1 <- c(apply(target1, 1, median), apply(target1, 1, sd))
   target2 <- apply(obs[, 4:5, ], c(1, 3), sum)
   target2 <- apply(
     target2,
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target2 <- c(apply(target2, 1, median), apply(target2, 1, sd))
   target3 <- apply(obs[, 2, , drop = FALSE], c(1, 3), sum)
   target3 <- apply(
     target3,
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target3 <- c(apply(target3, 1, median), apply(target3, 1, sd))
+
+  # average across iterations and collate for comparison with value
+  target <- c(
+    apply(target1, 1, median),
+    apply(target2, 1, median),
+    apply(target3, 1, median),
+    apply(target1, 1, sd),
+    apply(target2, 1, sd),
+    apply(target3, 1, sd)
+  )
+
+  # zscale these
+  target <- (target - mean(target)) / sd(target)
 
   # check statistic calcs match manual calcs
-  expect_equal(value, c(target1, target2, target3))
+  expect_equal(round(value, 10), round(target, 10))
 
 })
 
@@ -197,25 +317,31 @@ test_that("stat_abundance_moment works with different fns", {
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target1 <- apply(target1, 1, var)
   target2 <- apply(obs[, 2:5, ], c(1, 3), sum)
   target2 <- apply(
     target2,
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target2 <- apply(target2, 1, var)
   target3 <- apply(obs[, 1, , drop = FALSE], c(1, 3), sum)
   target3 <- apply(
     target3,
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target3 <- apply(target3, 1, var)
+
+  # average across iterations and collate for comparison with value
+  target <- c(
+    apply(target1, 1, var),
+    apply(target2, 1, var),
+    apply(target3, 1, var)
+  )
+
+  # zscale these
+  target <- (target - mean(target)) / sd(target)
 
   # check statistic calcs match manual calcs
-  expect_equal(value, c(target1, target2, target3))
-
+  expect_equal(round(value, 10), round(target, 10))
 
   # calculate values from data
   value <- stat_abundance_moment(obs, fn = mean)
@@ -227,24 +353,31 @@ test_that("stat_abundance_moment works with different fns", {
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target1 <- apply(target1, 1, mean)
   target2 <- apply(obs[, 2:5, ], c(1, 3), sum)
   target2 <- apply(
     target2,
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target2 <- apply(target2, 1, mean)
   target3 <- apply(obs[, 1, , drop = FALSE], c(1, 3), sum)
   target3 <- apply(
     target3,
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target3 <- apply(target3, 1, mean)
+
+  # average across iterations and collate for comparison with value
+  target <- c(
+    apply(target1, 1, mean),
+    apply(target2, 1, mean),
+    apply(target3, 1, mean)
+  )
+
+  # zscale these
+  target <- (target - mean(target)) / sd(target)
 
   # check statistic calcs match manual calcs
-  expect_equal(value, c(target1, target2, target3))
+  expect_equal(round(value, 10), round(target, 10))
 
   # calculate values from data
   value <- stat_abundance_moment(obs, fn = list(sum, mean, var))
@@ -256,24 +389,37 @@ test_that("stat_abundance_moment works with different fns", {
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target1 <- c(apply(target1, 1, sum), apply(target1, 1, mean), apply(target1, 1, var))
   target2 <- apply(obs[, 2:5, ], c(1, 3), sum)
   target2 <- apply(
     target2,
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target2 <- c(apply(target2, 1, sum), apply(target2, 1, mean), apply(target2, 1, var))
   target3 <- apply(obs[, 1, , drop = FALSE], c(1, 3), sum)
   target3 <- apply(
     target3,
     1,
     function(x) c(mean(x), var(x), moments::skewness(x), moments::kurtosis(x))
   )
-  target3 <- c(apply(target3, 1, sum), apply(target3, 1, mean), apply(target3, 1, var))
+
+  # average across iterations and collate for comparison with value
+  target <- c(
+    apply(target1, 1, sum),
+    apply(target2, 1, sum),
+    apply(target3, 1, sum),
+    apply(target1, 1, mean),
+    apply(target2, 1, mean),
+    apply(target3, 1, mean),
+    apply(target1, 1, var),
+    apply(target2, 1, var),
+    apply(target3, 1, var)
+  )
+
+  # zscale these
+  target <- (target - mean(target)) / sd(target)
 
   # check statistic calcs match manual calcs
-  expect_equal(value, c(target1, target2, target3))
+  expect_equal(round(value, 10), round(target, 10))
 
 })
 
