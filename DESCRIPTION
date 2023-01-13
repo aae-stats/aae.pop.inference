@@ -23,7 +23,8 @@ Depends:
     R (>= 3.0),
     EasyABC
 Imports:
-    stats
+    stats,
+    moments
 Suggests:
     aae.pop,
     testthat,
