@@ -19,7 +19,10 @@ vector of summary statistics with the same length as \code{target}}
 as described in
 \code{\link[EasyABC:ABC_sequential]{EasyABC::ABC_sequential()}}.
 Currently supported options are the uniform, normal, lognormal,
-and exponential distributions}
+and exponential distributions, and each list element should be a
+vector specifying the distribution ("unif", "normal", "lognormal",
+or "exponential"), followed by one (for the exponential distribution)
+or two parameters (all other distributions)}
 
 \item{target}{values to be compared to model outputs simulated
 with \code{model}}

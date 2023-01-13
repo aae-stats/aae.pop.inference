@@ -20,7 +20,10 @@ NULL
 #'   as described in
 #'   \code{\link[EasyABC:ABC_sequential]{EasyABC::ABC_sequential()}}.
 #'   Currently supported options are the uniform, normal, lognormal,
-#'   and exponential distributions
+#'   and exponential distributions, and each list element should be a
+#'   vector specifying the distribution ("unif", "normal", "lognormal",
+#'   or "exponential"), followed by one (for the exponential distribution)
+#'   or two parameters (all other distributions)
 #' @param target values to be compared to model outputs simulated
 #'   with \code{model}
 #' @param \dots additional arguments passed to the sequential ABC sampler
@@ -48,9 +51,12 @@ inference <- function(
     ...
 ) {
 
-  # the simulation method must be a function
+  # the simulation method must be a function and prior
+  #   must be a list
   if(!is.function(model))
     stop("model must be a function", call. = FALSE)
+  if (!is.list(prior))
+    stop("prior must be a list", call. = FALSE)
 
   # and the output from model should match the length of target
   prior_draw <- sapply(prior, sample_once)
@@ -65,6 +71,7 @@ inference <- function(
   # set baseline arguments and overwrite any that are set by user
   args <- list(
     model = model,
+    prior = prior,
     summary_stat_target = target,
     method = "Lenormand",
     nb_simul = 1000,
@@ -75,6 +82,48 @@ inference <- function(
 
   # define and return inference output
   as_inference(do.call(EasyABC::ABC_sequential, args))
+
+}
+
+# internal function to check that the specified prior is defined
+#   as required by EasyABC::ABC_sequential
+check_prior <- function(x) {
+
+  # check prior distn is implemented in ABC_sequential
+  prior_distn <- sapply(x, function(x) x[1])
+  if (!all(x %in% c("unif", "lognormal", "normal", "exponential"))) {
+    stop(
+      "prior contains unknown distribution; must be one of unif, normal, ",
+      "lognormal, or exponential",
+      call. = FALSE
+    )
+  }
+
+  # check prior has the correct length for each type
+  prior_ok <- TRUE
+  for (i in seq_along(x)) {
+    if (x[[i]][1] == "exponential") {
+      args_ok <- length(x[[i]]) == 2 &
+        !is.na(as.numeric(x[[i]][2]))
+    } else {
+      args_ok <- length(x[[i]]) == 3 &
+        !any(is.na(as.numeric(x[[i]][2:3])))
+    }
+    prior_ok <- prior_ok & args_ok
+  }
+
+  # error if not OK
+  if (!prior_ok) {
+    stop(
+      "at least one elemenet of prior has the wrong length or values; each ",
+      " element should contain a distribution followed by one (for ",
+      "exponential) or two numeric values (all other distributions)",
+      call. = FALSE
+    )
+  }
+
+  # return silently
+  out <- prior_ok
 
 }
 
@@ -94,7 +143,7 @@ sample_once <- function(x) {
   )
 
   # draw a single value from the relevant distribution
-  do.call(distn, lapply(seq_along(x)[-1], function(i) x[i]))
+  do.call(distn, c(1, lapply(seq_along(x)[-1], function(i) as.numeric(x[i]))))
 
 }
 
@@ -184,8 +233,5 @@ plot.inference <- function(x, y, ..., which = NULL) {
 
 # internal function: set inference class
 as_inference <- function(x) {
-  type <- "array"
-  if (is.matrix(x))
-    type <- "matrix"
-  as_class(x, name = "inference", type = type)
+  as_class(x, name = "inference", type = "list")
 }
