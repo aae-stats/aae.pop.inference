@@ -10,7 +10,7 @@ NULL
 #'
 #' @export
 #'
-#' @importFrom stats sd median quantile
+#' @importFrom stats sd median quantile var
 #'
 #' @param x an object returned from
 #'   \code{\link[aae.pop:simulate]{aae.pop::simulate()}} containing
@@ -57,8 +57,9 @@ stat_abundance_trend <- function(
 
   # check fn and wrap it in a list if it's an isolated function to make
   #   the loop below work cleanly
-  if (!(is.list(fn) | is.function(fn))) {
-    stop("fn must be a function or list of functions", call. = FALSE)
+  if (!is.list(fn)) {
+    if (!is.function(fn))
+      stop("fn must be a function or list of functions", call. = FALSE)
   }
   if (is.list(fn)) {
     if (!all(sapply(fn, class) == "function"))
@@ -148,8 +149,9 @@ stat_abundance_moment <- function(
 
   # check fn and wrap it in a list if it's an isolated function to make
   #   the loop below work cleanly
-  if (!(is.list(fn) | is.function(fn))) {
-    stop("fn must be a function or list of functions", call. = FALSE)
+  if (!is.list(fn)) {
+    if (!is.function(fn))
+      stop("fn must be a function or list of functions", call. = FALSE)
   }
   if (is.list(fn)) {
     if (!all(sapply(fn, class) == "function"))
@@ -195,5 +197,10 @@ stat_abundance_moment <- function(
 
 # internal function: wrapper to calculate moments in a single function
 moment_fn <- function(x, ...) {
-  c(mean(x, ...), var(x, ...), moments::skewness(x, ...), moments::kurtosis(x, ...))
+  c(
+    mean(x, ...),
+    var(x, ...),
+    moments::skewness(x, ...),
+    moments::kurtosis(x, ...)
+  )
 }

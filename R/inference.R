@@ -12,6 +12,7 @@ NULL
 #'
 #' @importFrom EasyABC ABC_sequential
 #' @importFrom stats runif rlnorm rnorm rexp quantile
+#' @importFrom graphics hist par
 #'
 #' @param model a function to simulate a population dynamics object
 #'   from a set of parameters. This function must return a
@@ -26,6 +27,11 @@ NULL
 #'   or two parameters (all other distributions)
 #' @param target values to be compared to model outputs simulated
 #'   with \code{model}
+#' @param method sequential ABC method to use for sampling, see
+#'   \code{\link[EasyABC:ABC_sequential]{EasyABC::ABC_sequential()}} for
+#'   details
+#' @param x output from \code{inference}
+#' @param object output from \code{inference}
 #' @param \dots additional arguments passed to the sequential ABC sampler
 #'   (see \code{\link[EasyABC:ABC_sequential]{EasyABC::ABC_sequential()}})
 #'
@@ -53,13 +59,13 @@ inference <- function(
 
   # the simulation method must be a function and prior
   #   must be a list
-  if(!is.function(model))
+  if (!is.function(model))
     stop("model must be a function", call. = FALSE)
   if (!is.list(prior))
     stop("prior must be a list", call. = FALSE)
 
   # and then check the prior is correctly specified for ABC_sequential
-  prior_test <- check_prior(prior)
+  check_prior(prior)
 
   # and the output from model should match the length of target
   prior_draw <- sapply(prior, sample_once)
@@ -125,9 +131,6 @@ check_prior <- function(x) {
     )
   }
 
-  # return silently
-  out <- prior_ok
-
 }
 
 # internal function to draw a single set of values from a prior defined
@@ -175,17 +178,17 @@ print.inference <- function(x, ...) {
 # S3 summary method
 #' @export
 # nolint start
-summary.inference <- function(x, ...) {
+summary.inference <- function(object, ...) {
   # nolint end
 
   # calculate quantiles of the estimated posterior distribution
   param_dist <- apply(
-    x$param,
+    object$param,
     2,
     quantile,
     pr = c(0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95)
   )
-  colnames(param_dist) <- paste0("Parameter ", seq_len(ncol(x$param)))
+  colnames(param_dist) <- paste0("Parameter ", seq_len(ncol(object$param)))
   rownames(param_dist) <- paste0(
     c("5th", "10th", "25th", "50th", "75th", "90th", "95th"),
     " percentile"
@@ -193,17 +196,12 @@ summary.inference <- function(x, ...) {
 
   # print these quantiles with info on compute time
   cat(paste0(
-    "Inference on ", ncol(x$param),
-    " model parameters took ", x$computime,
+    "Inference on ", ncol(object$param),
+    " model parameters took ", object$computime,
     " seconds. Posterior distributions for each parameter ",
     " had the following quantiles:\n"
   ))
   print(param_dist)
-
-  # and return silently
-  outputs <- list(
-    quantiles = param_dist
-  )
 
 }
 
