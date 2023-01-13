@@ -58,6 +58,9 @@ inference <- function(
   if (!is.list(prior))
     stop("prior must be a list", call. = FALSE)
 
+  # and then check the prior is correctly specified for ABC_sequential
+  prior_test <- check_prior(prior)
+
   # and the output from model should match the length of target
   prior_draw <- sapply(prior, sample_once)
   sim_test <- model(prior_draw)
@@ -91,7 +94,7 @@ check_prior <- function(x) {
 
   # check prior distn is implemented in ABC_sequential
   prior_distn <- sapply(x, function(x) x[1])
-  if (!all(x %in% c("unif", "lognormal", "normal", "exponential"))) {
+  if (!all(prior_distn %in% c("unif", "lognormal", "normal", "exponential"))) {
     stop(
       "prior contains unknown distribution; must be one of unif, normal, ",
       "lognormal, or exponential",

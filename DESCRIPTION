@@ -1,7 +1,7 @@
 Package: aae.pop.inference
 Type: Package
 Title: Parameter Inference for Multispecies Population Dynamics 
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Date: 2023-01-11
 Author: c(
   person(given = "Jian",
@@ -26,13 +26,9 @@ Imports:
     stats
 Suggests:
     aae.pop,
-    knitr,
     testthat,
     covr,
-    rmarkdown,
+    lintr,
     spelling
-VignetteBuilder:
-    knitr,
-    rmarkdown
 RoxygenNote: 7.1.1
 Language: en-GB
