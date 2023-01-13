@@ -25,7 +25,7 @@ Depends:
 Imports:
     stats
 Suggests:
-    aae.pop,
+    aae-stats/aae.pop,
     testthat,
     covr,
     lintr,
