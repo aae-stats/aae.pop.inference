@@ -25,10 +25,12 @@ Depends:
 Imports:
     stats
 Suggests:
-    aae-stats/aae.pop,
+    aae.pop,
     testthat,
     covr,
     lintr,
     spelling
+Remotes:
+    aae-stats/aae.pop
 RoxygenNote: 7.1.1
 Language: en-GB
