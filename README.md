@@ -7,7 +7,7 @@
 
 ![R-CMD-check](https://github.com/aae-stats/aae.pop.inference/actions/workflows/check-standard.yaml/badge.svg)
 [![Codecov test
-coverage](https://codecov.io/gh/aae-stats/aae.pop.inference/branch/main/graph/badge.svg)](https://app.codecov.io/aae-stats/aae.pop.inference?branch=main)
+coverage](https://codecov.io/github/aae-stats/aae.pop.inference/main/graph/badge.svg)](https://app.codecov.io/github/aae-stats/aae.pop.inference/)
 <!-- badges: end -->
 
 `aae.pop.inference` supports inference on population dynamics models
