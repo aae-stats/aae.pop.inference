@@ -201,11 +201,11 @@ summary.inference <- function(object, ...) {
   # print these quantiles with info on compute time
   cat(paste0(
     "Inference on ", ncol(object$param),
-    " model parameters took ", object$computime,
+    " model parameters took ", round(object$computime, 3),
     " seconds. Posterior distributions for each parameter ",
     " had the following quantiles:\n"
   ))
-  print(param_dist)
+  print(round(param_dist, 4))
 
 }
 

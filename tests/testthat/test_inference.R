@@ -85,7 +85,8 @@ test_that("inference creates an ABC output", {
       c("unif", 0.01, 1)
     ),
     target = target,
-    nb_simul = 10
+    nb_simul = 10,
+    progress_bar = FALSE
   )
 
   # quick inference using full function call
@@ -98,14 +99,13 @@ test_that("inference creates an ABC output", {
     ),
     nb_simul = 10,
     summary_stat_target = target,
-    progress_bar = TRUE
+    progress_bar = FALSE
   )
 
   # check inference has the same output structure as an EasyABC call
   expect_equal(names(inference_test), names(easyabc_test))
 
 })
-
 
 test_that("inference generates an approximately correct output", {
 
@@ -117,7 +117,8 @@ test_that("inference generates an approximately correct output", {
       c("unif", 0.01, 1)
     ),
     target = target_long,
-    nb_simul = 100
+    nb_simul = 100,
+    progress_bar = FALSE
   )
 
   # linear regression of scaled parameter estimates should have
@@ -145,7 +146,8 @@ test_that("inference errors informatively", {
         c("unif", 0.01, 1)
       ),
       target = target,
-      nb_simul = 10
+      nb_simul = 10,
+      progress_bar = FALSE
     ),
     "must be a function"
   )
@@ -159,7 +161,8 @@ test_that("inference errors informatively", {
         c("unif", 0.01, 1)
       ),
       target = target,
-      nb_simul = 10
+      nb_simul = 10,
+      progress_bar = FALSE
     ),
     "must be a list"
   )
@@ -173,7 +176,23 @@ test_that("inference errors informatively", {
         c("unif", 0.01, 1)
       ),
       target = target,
-      nb_simul = 10
+      nb_simul = 10,
+      progress_bar = FALSE
+    ),
+    "at least one elemenet of prior has the wrong length"
+  )
+
+  # with incorrect prior values for a given distn
+  expect_error(
+    inference(
+      model = popsim_fn,
+      prior = list(
+        c("exponential", 50, 10),
+        c("unif", 0.01, 1)
+      ),
+      target = target,
+      nb_simul = 10,
+      progress_bar = FALSE
     ),
     "at least one elemenet of prior has the wrong length"
   )
@@ -187,7 +206,8 @@ test_that("inference errors informatively", {
         c("unif", 0.01, 1)
       ),
       target = target,
-      nb_simul = 10
+      nb_simul = 10,
+      progress_bar = FALSE
     ),
     "prior contains unknown distribution"
   )
@@ -201,9 +221,39 @@ test_that("inference errors informatively", {
         c("unif", 0.01, 1)
       ),
       target = c(target, 1),
-      nb_simul = 10
+      nb_simul = 10,
+      progress_bar = FALSE
     ),
     "must return an output with the same length as target"
   )
+
+})
+
+test_that("S3 methods work correctly", {
+
+  # quick (inaccurate) inference
+  inference_test <- inference(
+    model = popsim_fn,
+    prior = list(
+      c("unif", 50, 500),
+      c("unif", 0.01, 1)
+    ),
+    target = target,
+    nb_simul = 10,
+    progress_bar = FALSE
+  )
+
+  # check `is` method
+  expect_true(is.inference(inference_test))
+  expect_false(is.inference(rnorm(5)))
+
+  # check print returns an output
+  expect_output(print(inference_test), "Outputs from sequential ABC")
+
+  # check summary returns an output
+  expect_output(summary(inference_test), "Inference on 2 model parameters")
+
+  # TODO: add tests of plots (either check for no errors, silently return
+  #   an output and check that, or use a fuzzy match on plots)
 
 })
