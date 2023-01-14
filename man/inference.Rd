@@ -27,8 +27,16 @@ or two parameters (all other distributions)}
 \item{target}{values to be compared to model outputs simulated
 with \code{model}}
 
+\item{method}{sequential ABC method to use for sampling, see
+\code{\link[EasyABC:ABC_sequential]{EasyABC::ABC_sequential()}} for
+details}
+
 \item{\dots}{additional arguments passed to the sequential ABC sampler
 (see \code{\link[EasyABC:ABC_sequential]{EasyABC::ABC_sequential()}})}
+
+\item{x}{output from \code{inference}}
+
+\item{object}{output from \code{inference}}
 }
 \description{
 Generic function to estimate parameters using sequential
