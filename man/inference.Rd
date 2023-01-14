@@ -3,12 +3,21 @@
 \name{inference}
 \alias{inference}
 \alias{is.inference}
+\alias{print.inference}
+\alias{summary.inference}
+\alias{plot.inference}
 \title{Estimate parameters of a simulation model with sequential
   approximate Bayesian computation}
 \usage{
 inference(model, prior, target, method = NULL, ...)
 
 is.inference(x)
+
+\method{print}{inference}(x, ...)
+
+\method{summary}{inference}(object, ...)
+
+\method{plot}{inference}(x, y, ..., which = NULL)
 }
 \arguments{
 \item{model}{a function to simulate a population dynamics object
@@ -37,6 +46,10 @@ details}
 \item{x}{output from \code{inference}}
 
 \item{object}{output from \code{inference}}
+
+\item{y}{ignored, included for consistency with generic plot method}
+
+\item{which}{the parameter to plot, defaults to all estimated parameters}
 }
 \description{
 Generic function to estimate parameters using sequential

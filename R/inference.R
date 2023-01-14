@@ -31,6 +31,8 @@ NULL
 #'   \code{\link[EasyABC:ABC_sequential]{EasyABC::ABC_sequential()}} for
 #'   details
 #' @param x output from \code{inference}
+#' @param y ignored, included for consistency with generic plot method
+#' @param which the parameter to plot, defaults to all estimated parameters
 #' @param object output from \code{inference}
 #' @param \dots additional arguments passed to the sequential ABC sampler
 #'   (see \code{\link[EasyABC:ABC_sequential]{EasyABC::ABC_sequential()}})
@@ -163,6 +165,7 @@ is.inference <- function(x) {
 }
 
 # S3 print method
+#' @rdname inference
 #' @export
 # nolint start
 print.inference <- function(x, ...) {
@@ -176,6 +179,7 @@ print.inference <- function(x, ...) {
 }
 
 # S3 summary method
+#' @rdname inference
 #' @export
 # nolint start
 summary.inference <- function(object, ...) {
@@ -206,6 +210,7 @@ summary.inference <- function(object, ...) {
 }
 
 # S3 plot method
+#' @rdname inference
 #' @export
 # nolint start
 plot.inference <- function(x, y, ..., which = NULL) {

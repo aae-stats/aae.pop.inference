@@ -40,7 +40,11 @@ popsim_fn <- function(par) {
     )
   )
 
-  sim <- simulate(tmp, nsim = 10, args = list(density_dependence = list(theta = par[2])))
+  sim <- simulate(
+    tmp,
+    nsim = 10,
+    args = list(density_dependence = list(theta = par[2]))
+  )
 
   stat_abundance_trend(sim)
 
@@ -57,7 +61,11 @@ popsim_fn_long <- function(par) {
     )
   )
 
-  sim <- simulate(tmp, nsim = 100, args = list(density_dependence = list(theta = par[2])))
+  sim <- simulate(
+    tmp,
+    nsim = 100,
+    args = list(density_dependence = list(theta = par[2]))
+  )
 
   stat_abundance_trend(sim)
 
