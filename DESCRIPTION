@@ -30,7 +30,9 @@ Suggests:
     testthat,
     covr,
     lintr,
-    spelling
+    spelling,
+    knitr,
+    rmarkdown
 Remotes:
     aae-stats/aae.pop
 RoxygenNote: 7.1.1
