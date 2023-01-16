@@ -253,7 +253,8 @@ test_that("S3 methods work correctly", {
   # check summary returns an output
   expect_output(summary(inference_test), "Inference on 2 model parameters")
 
-  # TODO: add tests of plots (either check for no errors, silently return
-  #   an output and check that, or use a fuzzy match on plots)
+  # test that an inference object can be plotted without warnings
+  # TODO: consider more detailed test comparing expected to observed
+  expect_silent(plot(inference_test))
 
 })

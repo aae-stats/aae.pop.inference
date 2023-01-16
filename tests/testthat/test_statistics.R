@@ -430,16 +430,28 @@ test_that("stat_abundance_trend and _moment error informatively", {
     stat_abundance_moment(rnorm(10)),
     "must be a simulation object"
   )
+  expect_error(
+    stat_abundance_trend(rnorm(10)),
+    "must be a simulation object"
+  )
 
   # when fn is not a function
   expect_error(
     stat_abundance_moment(obs, fn = rnorm(10)),
     "fn must be a function"
   )
+  expect_error(
+    stat_abundance_trend(obs, fn = rnorm(10)),
+    "fn must be a function"
+  )
 
   # or a list of functions
   expect_error(
     stat_abundance_moment(obs, fn = list(mean, rnorm(10))),
+    "all elements must be functions"
+  )
+  expect_error(
+    stat_abundance_trend(obs, fn = list(mean, rnorm(10))),
     "all elements must be functions"
   )
 
