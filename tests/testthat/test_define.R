@@ -300,7 +300,17 @@ test_that("define errors informatively with incorrect priors", {
 
 })
 
-test_that("print method works correct", {
+test_that("define errors informatively without dynamics input", {
+
+  # check survival as a list of incorrect dims
+  expect_error(
+    define(x = rnorm(10)),
+    "must be a dynamics object"
+  )
+
+})
+
+test_that("print and is methods work correctly", {
 
   # define the inference model
   pop_inf <- define(
@@ -316,5 +326,8 @@ test_that("print method works correct", {
 
   # check print returns an output
   expect_output(print(pop_inf), "Specified model and priors for use")
+
+  # check the `is` method works
+  expect_true(is.definition(pop_inf))
 
 })
