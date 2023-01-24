@@ -114,7 +114,40 @@ relatively broad distributions with high uncertainty. However, a plot of
 these two parameters against one another highlights their close
 relationship, with a near perfect linear correlation between the two.
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" /><img src="man/figures/README-unnamed-chunk-2-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" /><img src="man/figures/README-unnamed-chunk-2-2.png" width="100%" /><img src="man/figures/README-unnamed-chunk-2-3.png" width="100%" />
+
+The `define()` function also provides a helper to set up simulations
+when inference is required for vital rates parameters only (the elements
+of the population dynamics matrix). This function can be used to
+flexibly perform inference on any or all elements in the vital rates
+matrix with fixed or variable priors.
+
+``` r
+# define inference model for the transition and reproduction elements
+popsim_vital <- define(
+  x = pop_fn,
+  masks = list(
+    survival = aae.pop::transition(pop_fn$matrix),
+    reproduction = aae.pop::reproduction(pop_fn$matrix)
+  ),
+  nsim = 100
+)
+
+# and run it (nb_simul too low and p_acc_min too high for a real example)
+pars <- inference(
+  model = popsim_vital$model,
+  prior = popsim_vital$prior,
+  target = popsim_vital$stat(obs),
+  nb_simul = 100,   # real values should be closer to 1000
+  progress_bar = FALSE,
+  p_acc_min = 0.3   # default setting is 0.05
+)
+
+# plot the parameter estimates (one for each nonzero parameter)
+plot(pars)
+```
+
+<img src="man/figures/README-define-example-1.png" width="100%" /><img src="man/figures/README-define-example-2.png" width="100%" />
 
 ## Issues
 
