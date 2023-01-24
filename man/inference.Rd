@@ -54,7 +54,8 @@ details}
 \description{
 Generic function to estimate parameters using sequential
   ABC, targeted specifically towards models implemented with the
-  \code{\link{simulate}} function in the \code{aae.pop} package.
+  \code{\link[aae.pop:simulate]{aae.pop::simulate()}} function
+  in the \code{aae.pop} package.
 }
 \details{
 Approximate Bayesian computation is a fast method for parameter
@@ -70,5 +71,58 @@ Approximate Bayesian computation is a fast method for parameter
   existing simulation tools such as those in the \code{aae.pop} package.
 }
 \examples{
-# to add
+# setup: define a pop model to simulate and use in ABC
+nclass <- 5
+popmat <- matrix(0, ncol = nclass, nrow = nclass)
+popmat[transition(popmat)] <- c(0.3, 0.5, 0.7, 0.8)
+popmat[reproduction(popmat)] <- c(0, 1, 4, 10)
+dd <- density_dependence(
+  funs = ricker(100, exclude = 1),
+  masks = reproduction(popmat)
+)
+pop_fn <- dynamics(matrix = popmat, dd)
+
+# simulate some data from this model to use as a target data set
+obs <- simulate(
+  pop_fn,
+  nsim = 100,
+  args = list(density_dependence = list(theta = 0.4))
+)
+
+# define wrapper for a simulation from K and DD parameters
+popsim_fn <- function(par) {
+
+  tmp <- update(
+    pop_fn,
+    aae.pop::density_dependence(
+      funs = aae.pop::ricker(par[1], exclude = 1),
+      masks = aae.pop::reproduction(popmat)
+    )
+  )
+
+  sim <- simulate(
+    tmp,
+    nsim = 10,
+    args = list(density_dependence = list(theta = par[2]))
+  )
+
+  stat_abundance_trend(sim)
+
+}
+
+# and run it with uniform priors for both parameters (quick run,
+#   nb_simul too low and p_acc_min too high for accurate results)
+pars <- inference(
+  model = popsim_fn,
+  prior = list(
+    c("unif", 50, 500),
+    c("unif", 0.01, 1)
+  ),
+  target = target,
+  nb_simul = 10,
+  progress_bar = TRUE
+)
+
+# plot estimated parameters (not expected to be accurate)
+plot(pars)
 }

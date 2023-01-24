@@ -37,7 +37,29 @@ NULL
 #'   class (often young-of-year recruits), and the first class only.
 #'
 #' @examples
-#' # to add
+#' # setup: define a pop model to simulate and use in ABC
+#' nclass <- 5
+#' popmat <- matrix(0, ncol = nclass, nrow = nclass)
+#' popmat[transition(popmat)] <- c(0.3, 0.5, 0.7, 0.8)
+#' popmat[reproduction(popmat)] <- c(0, 1, 4, 10)
+#' dd <- density_dependence(
+#'   funs = ricker(100, exclude = 1),
+#'   masks = reproduction(popmat)
+#' )
+#' pop_fn <- dynamics(matrix = popmat, dd)
+#'
+#' # simulate some data from this model to use as a target data set
+#' obs <- simulate(
+#'   pop_fn,
+#'   nsim = 100,
+#'   args = list(density_dependence = list(theta = 0.4))
+#' )
+#'
+#' # calculate summary statistics by year
+#' stat_abundance_trend(obs)
+#'
+#' # calculate summary statistics as moments over all years
+#' stat_abundance_moment(obs)
 stat_abundance_trend <- function(
   x,
   classes = NULL,
@@ -128,8 +150,6 @@ stat_abundance_trend <- function(
 #'   to the median and standard deviation. The first four moments are
 #'   included (mean, variance, skewness, kurtosis).
 #'
-#' @examples
-#' # to add
 stat_abundance_moment <- function(
   x,
   classes = NULL,
