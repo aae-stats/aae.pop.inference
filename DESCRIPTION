@@ -24,9 +24,9 @@ Depends:
     EasyABC
 Imports:
     stats,
-    moments
+    moments,
+    aae.pop
 Suggests:
-    aae.pop,
     testthat,
     covr,
     lintr,
