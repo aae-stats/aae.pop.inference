@@ -298,7 +298,7 @@ plot.inference <- function(x, y, ..., which = NULL) {
   nrow <- ceiling(sqrt_npar)
   par(mfrow = c(nrow, ncol))
   for (i in which)
-    do.call(hist, c(list(x$param[, i], args)))
+    do.call(hist, c(list(x$param[, i]), args))
 
 }
 
