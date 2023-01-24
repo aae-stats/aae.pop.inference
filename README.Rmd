@@ -114,7 +114,7 @@ relationship, with a near perfect linear correlation between the two.
 # plot the estimated parameters
 par(mfrow = c(2, 1), mar = c(5.1, 4.5, 2.1, 0.5))
 plot(abc_est, which = 1, xlab = "Carrying capacity")
-plot(abc_est, which = 2, xlab = "Carrying capacity")
+plot(abc_est, which = 2, xlab = "Density dependence parameter")
 
 # and show their correlation
 plot(
@@ -128,7 +128,9 @@ plot(
 )
 ```
 
-The `define()` function also provides a helper to set up simulations when 
+## Example: estimating vital rates
+
+The `define()` function provides a helper to set up simulations when 
 inference is required for vital rates parameters only (the elements of
 the population dynamics matrix). This function can be used to flexibly
 perform inference on any or all elements in the vital rates matrix with

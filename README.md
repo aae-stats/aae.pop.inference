@@ -116,11 +116,13 @@ relationship, with a near perfect linear correlation between the two.
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" /><img src="man/figures/README-unnamed-chunk-2-2.png" width="100%" /><img src="man/figures/README-unnamed-chunk-2-3.png" width="100%" />
 
-The `define()` function also provides a helper to set up simulations
-when inference is required for vital rates parameters only (the elements
-of the population dynamics matrix). This function can be used to
-flexibly perform inference on any or all elements in the vital rates
-matrix with fixed or variable priors.
+## Example: estimating vital rates
+
+The `define()` function provides a helper to set up simulations when
+inference is required for vital rates parameters only (the elements of
+the population dynamics matrix). This function can be used to flexibly
+perform inference on any or all elements in the vital rates matrix with
+fixed or variable priors.
 
 ``` r
 # define inference model for the transition and reproduction elements
