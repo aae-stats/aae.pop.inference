@@ -284,7 +284,7 @@ test_that("define errors informatively with incorrect priors", {
         survival = c(1, 2, 3)
       )
     ),
-    "priors must be character vectors of lists of character vectors"
+    "priors must be character vectors or lists of character vectors"
   )
 
   # check reproduction as a vector of wrong class
@@ -295,7 +295,7 @@ test_that("define errors informatively with incorrect priors", {
         reproduction = c(1, 2, 3)
       )
     ),
-    "priors must be character vectors of lists of character vectors"
+    "priors must be character vectors or lists of character vectors"
   )
 
 })
