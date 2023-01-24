@@ -113,6 +113,9 @@ popsim_fn <- function(par) {
 
 }
 
+# calculate the target from the simulated data set
+target <- stat_abundance_trend(obs)
+
 # and run it with uniform priors for both parameters (quick run,
 #   nb_simul too low and p_acc_min too high for accurate results)
 pars <- inference(
