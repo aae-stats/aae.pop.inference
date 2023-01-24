@@ -71,6 +71,9 @@ Approximate Bayesian computation is a fast method for parameter
   existing simulation tools such as those in the \code{aae.pop} package.
 }
 \examples{
+# use the tools in aae.pop to set up an example
+library(aae.pop)
+
 # setup: define a pop model to simulate and use in ABC
 nclass <- 5
 popmat <- matrix(0, ncol = nclass, nrow = nclass)

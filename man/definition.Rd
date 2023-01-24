@@ -64,6 +64,9 @@ Return a simulation function and suitable priors to perform
   or two parameters (all other distributions)
 }
 \examples{
+# use the tools in aae.pop to set up an example
+library(aae.pop)
+
 # setup: define a pop model to simulate and use in ABC
 nclass <- 5
 popmat <- matrix(0, ncol = nclass, nrow = nclass)

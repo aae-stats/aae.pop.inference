@@ -60,6 +60,9 @@ Functions to define summary statistics based on
   included (mean, variance, skewness, kurtosis).
 }
 \examples{
+# use the tools in aae.pop to set up an example
+library(aae.pop)
+
 # setup: define a pop model to simulate and use in ABC
 nclass <- 5
 popmat <- matrix(0, ncol = nclass, nrow = nclass)
