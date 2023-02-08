@@ -88,7 +88,7 @@ NULL
 #' pars <- aae.pop.inference::inference(
 #'   model = pop_inf$model,
 #'   prior = pop_inf$prior,
-#'   target = pop_inf$stat(obs),
+#'   target = do.call(pop_inf$stat, c(list(obs), pop_inf$stat_args)),
 #'   nb_simul = 100,
 #'   progress_bar = TRUE,
 #'   p_acc_min = 0.3
