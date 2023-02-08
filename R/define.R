@@ -80,7 +80,7 @@ NULL
 #'   ),
 #'   stat = stat_abundance_trend,
 #'   sim_args = list(nsim = 5),
-#'   classes = list(c(1:3, 3:5))  # argument passed to stat
+#'   classes = list(c(1:3), c(3:5))  # argument passed to stat
 #' )
 #'
 #' # and run it (quick run, nb_simul too low and p_acc_min too high for

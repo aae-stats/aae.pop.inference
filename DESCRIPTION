@@ -36,5 +36,5 @@ Suggests:
     rmarkdown
 Remotes:
     aae-stats/aae.pop
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
 Language: en-GB

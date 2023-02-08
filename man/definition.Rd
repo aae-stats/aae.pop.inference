@@ -12,6 +12,7 @@ define(
   masks = list(),
   priors = list(),
   stat = aae.pop.inference::stat_abundance_trend,
+  sim_args = list(),
   ...
 )
 
@@ -39,8 +40,10 @@ model run with \code{\link[aae.pop:simulate]{aae.pop::simulate()}}.
 Defaults to
 \code{\link[aae.pop.inference:stat_abundance_trend]{aae.pop.inference::stat_abundance_trend()}}}
 
-\item{\dots}{additional arguments passed to
+\item{sim_args}{additional arguments passed to
 \code{\link[aae.pop:simulate]{aae.pop::simulate()}}}
+
+\item{\dots}{additional arguments passed to \code{stat}}
 }
 \description{
 Return a simulation function and suitable priors to perform
@@ -93,7 +96,9 @@ pop_inf <- define(
     survival = aae.pop::transition(pop_fn$matrix),
     reproduction = aae.pop::reproduction(pop_fn$matrix)
   ),
-  nsim = 5
+  stat = stat_abundance_trend,
+  sim_args = list(nsim = 5),
+  classes = list(c(1:3), c(3:5))  # argument passed to stat
 )
 
 # and run it (quick run, nb_simul too low and p_acc_min too high for
