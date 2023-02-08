@@ -29,8 +29,9 @@ NULL
 # nolint start
 #'   \code{\link[aae.pop.inference:stat_abundance_trend]{aae.pop.inference::stat_abundance_trend()}}
 # nolint end
-#' @param \dots additional arguments passed to
+#' @param sim_args additional arguments passed to
 #'   \code{\link[aae.pop:simulate]{aae.pop::simulate()}}
+#' @param \dots additional arguments passed to \code{stat}
 #'
 #' @details \code{define} returns a pre-defined template that can be used with
 #'   \code{\link[aae.pop.inference:inference]{aae.pop.inference::inference()}}
@@ -77,7 +78,9 @@ NULL
 #'     survival = aae.pop::transition(pop_fn$matrix),
 #'     reproduction = aae.pop::reproduction(pop_fn$matrix)
 #'   ),
-#'   nsim = 5
+#'   stat = stat_abundance_trend,
+#'   sim_args = list(nsim = 5),
+#'   classes = list(c(1:3, 3:5))  # argument passed to stat
 #' )
 #'
 #' # and run it (quick run, nb_simul too low and p_acc_min too high for
@@ -98,6 +101,7 @@ define <- function(
     masks = list(),
     priors = list(),
     stat = aae.pop.inference::stat_abundance_trend,
+    sim_args = list(),
     ...
 ) {
 
@@ -113,9 +117,11 @@ define <- function(
   dyn <- x$matrix
 
   # set default args for simulations
-  arg_list <- list(...)
   args <- list(nsim = 100)
-  args[names(arg_list)] <- arg_list
+  args[names(sim_args)] <- sim_args
+
+  # grab any args for stat
+  stat_args <- list(...)
 
   # set defaults for masks
   mask_set <- list(
@@ -168,7 +174,7 @@ define <- function(
     sims <- do.call(simulate, c(list(xset), args))
 
     # and return summary stat
-    stat(sims)
+    do.call(stat, c(list(sims), stat_args))
 
   }
 
@@ -177,7 +183,9 @@ define <- function(
     list(
       model = model,
       prior = prior,
-      stat = stat
+      stat = stat,
+      sim_args = args,
+      stat_args = stat_args
     )
   )
 

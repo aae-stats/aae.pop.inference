@@ -30,7 +30,7 @@ obs_long <- simulate(
 test_that("define works with fixed priors", {
 
   # define the inference model
-  pop_inf <- define(x = pop_fn, nsim = 5)
+  pop_inf <- define(x = pop_fn, sim_args = list(nsim = 5))
 
   # and run it
   pars <- aae.pop.inference::inference(
@@ -56,7 +56,7 @@ test_that("define works with custom masks", {
       survival = aae.pop::transition(pop_fn$matrix),
       reproduction = aae.pop::reproduction(pop_fn$matrix)
     ),
-    nsim = 5
+    sim_args = list(nsim = 5)
   )
 
   # and run it
@@ -97,7 +97,7 @@ test_that("define works with custom priors", {
         c("lognormal", 0, 3)
       )
     ),
-    nsim = 5
+    sim_args = list(nsim = 5)
   )
 
   # and run it
@@ -138,8 +138,10 @@ test_that("define works accurately with custom priors", {
         c("lognormal", 0, 3)
       )
     ),
-    nsim = 100,
-    args = list(density_dependence = list(theta = 0.4))
+    sim_args = list(
+      nsim = 100,
+      args = list(density_dependence = list(theta = 0.4))
+    )
   )
 
   # and run it
@@ -176,8 +178,10 @@ test_that("define works with aae.pop args and options", {
       survival = aae.pop::transition(pop_fn$matrix),
       reproduction = aae.pop::reproduction(pop_fn$matrix)
     ),
-    nsim = 5,
-    args = list(density_dependence = list(theta = 0.4))
+    sim_args = list(
+      nsim = 5,
+      args = list(density_dependence = list(theta = 0.4))
+    )
   )
 
   # and run it
@@ -200,11 +204,13 @@ test_that("define works with aae.pop args and options", {
       survival = aae.pop::transition(pop_fn$matrix),
       reproduction = aae.pop::reproduction(pop_fn$matrix)
     ),
-    nsim = 5,
-    args = list(density_dependence = list(theta = 0.4)),
-    options = list(
-      update = update_binomial_leslie,
-      tidy_abundances = floor
+    sim_args = list(
+      nsim = 5,
+      args = list(density_dependence = list(theta = 0.4)),
+      options = list(
+        update = update_binomial_leslie,
+        tidy_abundances = floor
+      )
     )
   )
 
@@ -233,8 +239,10 @@ test_that("define works correctly with different summary functions", {
       reproduction = aae.pop::reproduction(pop_fn$matrix)
     ),
     stat = aae.pop.inference::stat_abundance_moment,
-    nsim = 5,
-    args = list(density_dependence = list(theta = 0.4))
+    sim_args = list(
+      nsim = 5,
+      args = list(density_dependence = list(theta = 0.4))
+    )
   )
 
   # and run it
@@ -242,6 +250,39 @@ test_that("define works correctly with different summary functions", {
     model = pop_inf$model,
     prior = pop_inf$prior,
     target = pop_inf$stat(obs),
+    nb_simul = 100,
+    progress_bar = FALSE,
+    p_acc_min = 0.3
+  )
+
+  # just expect an output (not accurate) with correct number of pars and sims
+  expect_equal(8L, ncol(pars$param))
+
+})
+
+test_that("define works when args are passed to summary functions", {
+
+  # define the inference model
+  pop_inf <- define(
+    x = pop_fn,
+    masks = list(
+      survival = aae.pop::transition(pop_fn$matrix),
+      reproduction = aae.pop::reproduction(pop_fn$matrix)
+    ),
+    stat = aae.pop.inference::stat_abundance_moment,
+    sim_args = list(
+      nsim = 5,
+      args = list(density_dependence = list(theta = 0.4))
+    ),
+    classes = list(c(1:3, 3:5)),
+    zscale = FALSE
+  )
+
+  # and run it
+  pars <- aae.pop.inference::inference(
+    model = pop_inf$model,
+    prior = pop_inf$prior,
+    target = do.call(pop_inf$stat, c(list(obs), pop_inf$stat_args)),
     nb_simul = 100,
     progress_bar = FALSE,
     p_acc_min = 0.3
@@ -320,8 +361,10 @@ test_that("print and is methods work correctly", {
       reproduction = aae.pop::reproduction(pop_fn$matrix)
     ),
     stat = aae.pop.inference::stat_abundance_moment,
-    nsim = 5,
-    args = list(density_dependence = list(theta = 0.4))
+    sim_args = list(
+      nsim = 5,
+      args = list(density_dependence = list(theta = 0.4))
+    )
   )
 
   # check print returns an output
