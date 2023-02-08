@@ -274,7 +274,7 @@ test_that("define works when args are passed to summary functions", {
       nsim = 5,
       args = list(density_dependence = list(theta = 0.4))
     ),
-    classes = list(c(1:3, 3:5)),
+    classes = list(c(1:3), c(3:5)),
     zscale = FALSE
   )
 
