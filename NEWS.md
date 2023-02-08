@@ -1,5 +1,10 @@
 # aae.pop.inference (development version)
 
+## API changes
+
+- Arguments to `simulate` are now passed as `sim_args` (a list) in `define`
+- Dots argument in `define` passed to `stat` rather than `simulate`
+
 # aae.pop.inference 0.1.0
 
 ## Features
