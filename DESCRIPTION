@@ -27,7 +27,6 @@ Imports:
     moments,
     aae.pop
 Suggests:
-    aae.pop,
     testthat,
     covr,
     lintr,
